@@ -1,1 +1,55 @@
+# Nom du workflow qui apparaîtra dans l'onglet "Actions" de votre dépôt GitHub
+name: Déployer sur GitHub Pages
 
+# Déclencheur : Ce workflow s'exécute à chaque fois que vous poussez du code sur la branche "main"
+on:
+  push:
+    branches: [ "main" ]
+
+# Permissions : Autorise le workflow à écrire sur la section "Pages" de votre dépôt
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Tâches à exécuter
+jobs:
+  build-and-deploy:
+    # Utilise la dernière version d'Ubuntu comme environnement d'exécution
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Étape 1 : Récupère le code de votre dépôt pour que le workflow puisse l'utiliser
+      - name: Récupération du code 🛎️
+        uses: actions/checkout@v3
+
+      # Étape 2 : Installe Node.js, l'environnement nécessaire pour faire tourner React et npm
+      - name: Installation de Node.js 🟩
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Utilise la version 18 de Node.js
+          cache: 'npm'       # Met en cache les dépendances pour accélérer les futurs builds
+
+      # Étape 3 : Installe toutes les dépendances de votre projet (React, etc.)
+      - name: Installation des dépendances 📦
+        run: npm ci # 'npm ci' est une version plus rapide et stricte de 'npm install' pour l'automatisation
+
+      # Étape 4 : Construit l'application pour la production. 
+      # npm run build crée un dossier 'build' avec tous vos fichiers HTML/CSS/JS optimisés.
+      - name: Construction du projet 🏗️
+        run: npm run build
+
+      # Étape 5 : Configure GitHub Pages pour accepter le déploiement
+      - name: Configuration de GitHub Pages ⚙️
+        uses: actions/configure-pages@v3
+
+      # Étape 6 : Uploade le dossier 'build' comme un "artefact" que GitHub Pages peut utiliser
+      - name: Upload de l'artefact ⬆️
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './build'
+
+      # Étape 7 : Déploie l'artefact uploadé sur GitHub Pages
+      - name: Déploiement sur GitHub Pages 🚀
+        id: deployment
+        uses: actions/deploy-pages@v2
