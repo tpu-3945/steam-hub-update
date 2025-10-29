@@ -19,36 +19,46 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # Étape 1 : Récupère le code de votre dépôt pour que le workflow puisse l'utiliser
+      # Étape 1 : Récupère le code de votre dépôt
       - name: Récupération du code 🛎️
-        uses: actions/checkout@v4 # <-- Mis à jour de v3 à v4
+        uses: actions/checkout@v4
 
-      # Étape 2 : Installe Node.js, l'environnement nécessaire pour faire tourner React et npm
+      # Étape 2 : Installe Node.js
       - name: Installation de Node.js 🟩
-        uses: actions/setup-node@v4 # <-- Mis à jour de v3 à v4
+        uses: actions/setup-node@v4
         with:
           node-version: '18' 
           cache: 'npm'       
 
-      # Étape 3 : Installe toutes les dépendances de votre projet (React, etc.)
+      # Étape 3 : Installe toutes les dépendances de votre projet
       - name: Installation des dépendances 📦
-        run: npm ci 
+        run: npm install  # <-- C'EST LA LIGNE QUI A ÉTÉ CHANGÉE (avant c'était npm ci)
 
-      # Étape 4 : Construit l'application pour la production. 
+      # Étape 4 : Construit l'application pour la production
       - name: Construction du projet 🏗️
         run: npm run build
 
-      # Étape 5 : Configure GitHub Pages pour accepter le déploiement
+      # Étape 5 : Configure GitHub Pages
       - name: Configuration de GitHub Pages ⚙️
-        uses: actions/configure-pages@v5 # <-- Mis à jour de v3 à v5
+        uses: actions/configure-pages@v5
 
-      # Étape 6 : Uploade le dossier 'build' comme un "artefact" que GitHub Pages peut utiliser
+      # Étape 6 : Uploade le dossier 'build'
       - name: Upload de l'artefact ⬆️
-        uses: actions/upload-pages-artifact@v3 # <-- CORRECTION PRINCIPALE : Mis à jour de v2 à v3
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './build'
 
-      # Étape 7 : Déploie l'artefact uploadé sur GitHub Pages
+      # Étape 7 : Déploie sur GitHub Pages
       - name: Déploiement sur GitHub Pages 🚀
         id: deployment
-        uses: actions/deploy-pages@v4 # <-- Mis à jour de v2 à v4
+        uses: actions/deploy-pages@v4```
+
+### **Ce qu'il faut faire maintenant :**
+
+1.  Après avoir collé le nouveau code dans l'éditeur de GitHub, allez en haut à droite et cliquez sur le bouton vert **"Commit changes..."**.
+2.  Vous pouvez laisser le message par défaut ou écrire "fix: Use npm install instead of npm ci".
+3.  Cliquez sur le bouton vert **"Commit changes"** pour confirmer.
+
+Cette action va sauvegarder la modification et **relancer automatiquement le workflow de déploiement**. Allez dans l'onglet "Actions" de votre dépôt pour suivre la progression.
+
+Cette fois, l'étape "Installation des dépendances" devrait passer sans erreur et votre site sera déployé avec succès.
