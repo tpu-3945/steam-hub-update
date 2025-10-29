@@ -1,0 +1,19 @@
+.terminal {
+  font-family: 'Courier New', monospace;
+  background-color: rgba(15, 23, 42, 0.9);
+  border-left: 3px solid #3b82f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  min-height: 120px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+  transition: min-height 0.3s ease;
+}
+.terminal-line {
+  display: block;
+}
+.terminal-line.success { color: #4ade80; }
+.terminal-line.error { color: #f87171; }
+.terminal-line.info { color: #60a5fa; }
