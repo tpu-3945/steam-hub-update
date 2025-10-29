@@ -21,35 +21,34 @@ jobs:
     steps:
       # Étape 1 : Récupère le code de votre dépôt pour que le workflow puisse l'utiliser
       - name: Récupération du code 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # <-- Mis à jour de v3 à v4
 
       # Étape 2 : Installe Node.js, l'environnement nécessaire pour faire tourner React et npm
       - name: Installation de Node.js 🟩
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4 # <-- Mis à jour de v3 à v4
         with:
-          node-version: '18' # Utilise la version 18 de Node.js
-          cache: 'npm'       # Met en cache les dépendances pour accélérer les futurs builds
+          node-version: '18' 
+          cache: 'npm'       
 
       # Étape 3 : Installe toutes les dépendances de votre projet (React, etc.)
       - name: Installation des dépendances 📦
-        run: npm ci # 'npm ci' est une version plus rapide et stricte de 'npm install' pour l'automatisation
+        run: npm ci 
 
       # Étape 4 : Construit l'application pour la production. 
-      # npm run build crée un dossier 'build' avec tous vos fichiers HTML/CSS/JS optimisés.
       - name: Construction du projet 🏗️
         run: npm run build
 
       # Étape 5 : Configure GitHub Pages pour accepter le déploiement
       - name: Configuration de GitHub Pages ⚙️
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5 # <-- Mis à jour de v3 à v5
 
       # Étape 6 : Uploade le dossier 'build' comme un "artefact" que GitHub Pages peut utiliser
       - name: Upload de l'artefact ⬆️
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3 # <-- CORRECTION PRINCIPALE : Mis à jour de v2 à v3
         with:
           path: './build'
 
       # Étape 7 : Déploie l'artefact uploadé sur GitHub Pages
       - name: Déploiement sur GitHub Pages 🚀
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4 # <-- Mis à jour de v2 à v4
