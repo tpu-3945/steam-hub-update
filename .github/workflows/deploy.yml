@@ -1,64 +1,42 @@
-# Nom du workflow qui apparaîtra dans l'onglet "Actions" de votre dépôt GitHub
 name: Déployer sur GitHub Pages
 
-# Déclencheur : Ce workflow s'exécute à chaque fois que vous poussez du code sur la branche "main"
 on:
   push:
     branches: [ "main" ]
 
-# Permissions : Autorise le workflow à écrire sur la section "Pages" de votre dépôt
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Tâches à exécuter
 jobs:
   build-and-deploy:
-    # Utilise la dernière version d'Ubuntu comme environnement d'exécution
     runs-on: ubuntu-latest
     
     steps:
-      # Étape 1 : Récupère le code de votre dépôt
-      - name: Récupération du code 🛎️
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # Étape 2 : Installe Node.js
-      - name: Installation de Node.js 🟩
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' 
-          cache: 'npm'       
+          node-version: '18'
+          cache: 'npm'
 
-      # Étape 3 : Installe toutes les dépendances de votre projet
-      - name: Installation des dépendances 📦
-        run: npm install  # <-- C'EST LA LIGNE QUI A ÉTÉ CHANGÉE (avant c'était npm ci)
+      - name: Install dependencies
+        run: npm install
 
-      # Étape 4 : Construit l'application pour la production
-      - name: Construction du projet 🏗️
+      - name: Build project
         run: npm run build
 
-      # Étape 5 : Configure GitHub Pages
-      - name: Configuration de GitHub Pages ⚙️
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      # Étape 6 : Uploade le dossier 'build'
-      - name: Upload de l'artefact ⬆️
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './build'
+          path: ./build
 
-      # Étape 7 : Déploie sur GitHub Pages
-      - name: Déploiement sur GitHub Pages 🚀
+      - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4```
-
-### **Ce qu'il faut faire maintenant :**
-
-1.  Après avoir collé le nouveau code dans l'éditeur de GitHub, allez en haut à droite et cliquez sur le bouton vert **"Commit changes..."**.
-2.  Vous pouvez laisser le message par défaut ou écrire "fix: Use npm install instead of npm ci".
-3.  Cliquez sur le bouton vert **"Commit changes"** pour confirmer.
-
-Cette action va sauvegarder la modification et **relancer automatiquement le workflow de déploiement**. Allez dans l'onglet "Actions" de votre dépôt pour suivre la progression.
-
-Cette fois, l'étape "Installation des dépendances" devrait passer sans erreur et votre site sera déployé avec succès.
+        uses: actions/deploy-pages@v4
